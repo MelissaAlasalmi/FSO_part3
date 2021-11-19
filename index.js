@@ -24,6 +24,7 @@ let persons = [
     }
 ]
 
+
 app.get('/', (request, response) => {
   response.send('<h1>Hello, person!</h1>')
 })
@@ -38,7 +39,7 @@ app.get('/api/info', (request, response) => {
 		`<p>Phonebook has info for ${persons.length} people</p>
 		<p>${date.toGMTString()}</p>`
 	)
-  })
+})
 
 app.get('/api/persons/:id', (request, response) => {
 	const id = Number(request.params.id)
@@ -51,7 +52,16 @@ app.delete('/api/persons/:id', (request, response) => {
 	persons = persons.filter(person => person.id !== id)
   
 	response.status(204).end()
-  })
+})
+
+app.use(express.json())
+
+app.post('/api/persons/', (request, response) => {
+  const person = request.body
+  person.id = Math.floor(Math.random() * 1000000)
+  persons = persons.concat(person)
+  response.json(person)
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
