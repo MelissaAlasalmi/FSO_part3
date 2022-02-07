@@ -1,5 +1,5 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 
 let persons = [
     { 
@@ -55,15 +55,45 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.use(express.json())
+app.post('/api/persons', (request, result) => {
 
-app.post('/api/persons/', (request, response) => {
-  const person = request.body
-  person.id = Math.floor(Math.random() * 1000000)
-  persons = persons.concat(person)
-  response.json(person)
-})
+  const body = request.body;
+  console.log(body);
 
-const PORT = 3001
+  if (persons.some(person => person.name === body.name)) {
+    return result.status(400).json({
+      error: "person already exists"
+    });
+  }
+
+  if (persons.some(person => person.number === body.number)) {
+    return result.status(400).json({
+      error: "number already exists"
+    });
+  }
+
+  if (!body.name) {
+    return result.status(400).json({
+      error: 'name required',
+    })
+  }
+  if (!body.number) {
+    return result.status(400).json({
+      error: 'number required',
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: Math.floor(Math.random() * 1000000)
+  };
+
+  persons = persons.concat(person);
+  result.json(person);
+});
+
+const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
