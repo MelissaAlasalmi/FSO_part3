@@ -1,5 +1,8 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
+
+app.use(morgan('tiny'));
 
 let persons = [
     { 
@@ -58,7 +61,6 @@ app.use(express.json())
 app.post('/api/persons', (request, result) => {
 
   const body = request.body;
-  console.log(body);
 
   if (persons.some(person => person.name === body.name)) {
     return result.status(400).json({
