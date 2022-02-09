@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "frontend": "cd frontend && yarn start",
-    "start": "concurrently \"npm install\" \"npm run dev\" \"yarn\" \"yarn build\" \"npm run frontend\"",
+    "frontend": "cd frontend && yarn && yarn build && yarn start",
+    "start": "concurrently \"npm install\" \"npm run dev\" \"npm run frontend\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
