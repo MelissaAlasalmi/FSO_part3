@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-let baseUrl = 'http://localhost:3001/api/persons'
+let baseUrl = '/api/persons'
 
 const createContact = newContact => {
 	const request = axios.post(baseUrl, newContact)

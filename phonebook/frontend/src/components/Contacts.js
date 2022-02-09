@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-let baseUrl = 'http://localhost:3001/api/persons/'
+let baseUrl = '/api/persons/'
 
 const Contact = ({contact}) => <label>{contact} </label>
 
