@@ -32,7 +32,7 @@ const App = () => {
         setNumber={setNumber}
        />
       <h2>Numbers</h2>
-      <Contacts contacts={persons} />
+      <Contacts contacts={persons}/>
     </div>
   )
 }
