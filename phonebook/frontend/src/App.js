@@ -20,7 +20,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>Phonebook </h2>
       <div id="notification"></div>
       <FindContacts contacts={persons} />
       <h2>add new</h2>
