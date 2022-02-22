@@ -1,9 +1,7 @@
 import { useState } from "react";
 
 export const FindContacts = ({contacts}) => {
-
-    const[searchTerm, setSearchTerm] = useState('');
-
+  const[searchTerm, setSearchTerm] = useState('');
 	const handleChange = (event) => 
 		setSearchTerm(event.target.value)
 
@@ -13,7 +11,6 @@ export const FindContacts = ({contacts}) => {
 				type="text" 
 				placeholder="Search..." 
 				onChange={handleChange}/>
-				{/* eslint-disable-next-line */}
 				{ contacts.filter(values => {
 					if (values.name.toLowerCase().includes(searchTerm.toLowerCase()) 
 					&& searchTerm !== '')

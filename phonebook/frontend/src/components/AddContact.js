@@ -1,39 +1,6 @@
-import axios from 'axios'
 import React from 'react'
-import ReactDOM from 'react-dom'
-
-let baseUrl = '/api/persons'
-
-const createContact = newContact => {
-	const request = axios.post(baseUrl, newContact)
-	return request.then(response => response.data)
-}
-
-const updateContact = (contact, number) => {
-	contact.number = number
-	const request = axios.put(`${baseUrl}/${contact.id}`, contact)
-	return (
-		request.then(response => response.data)
-		.catch(error => {
-			failedNotification()
-			console.log(error)
-		})
-	)
-}
-
-const failedNotification = () =>{
-	ReactDOM.render(
-		<h3 style={{...styles.error}}>This person has already been removed from the phonebook</h3>, 
-		document.getElementById('notification')
-	)
-}
-
-const successNotification = (name) =>{
-	ReactDOM.render(
-		<h3 style={{...styles.notification}}>Added {name}</h3>, 
-		document.getElementById('notification')
-	)
-}
+import { createContact, updateContact } from './Service'
+import { errorNotification, successNotification } from './Notifications'
 
 export const AddContact = ({
 	persons,
@@ -63,8 +30,12 @@ export const AddContact = ({
 				name: newName,
 				number: pNum,
 			}
-			createContact(newContact)
-			successNotification(newName)
+			try {
+				const response = createContact(newContact);
+				successNotification(response.name);	
+			} catch (error) {
+				errorNotification(error.message);
+			}
 		}
 		setNewName('')
 		setNumber('')
@@ -89,25 +60,4 @@ export const AddContact = ({
 		</div>
 	</form>
 	)
-}
-
-const styles = {
-	notification: {
-		color: 'green',
-		background: 'lightgrey',
-		fontSize: '20px',
-		borderStyle: 'solid',
-		borderRadius: '5px',
-		padding: '10px',
-		marginBottom: '10px',
-	},
-	error: {
-		color: 'red',
-		background: 'lightgrey',
-		fontSize: '20px',
-		borderStyle: 'solid',
-		borderRadius: '5px',
-		padding: '10px',
-		marginBottom: '10px',
-	},
 }

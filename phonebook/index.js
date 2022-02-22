@@ -1,18 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors')
 const app = express();
+const cors = require('cors');
 const Contact = require('./models/contact');
 
 app.use(express.static('build'));
-
-morgan.token('newPerson', (request) => {
-  if (request.method === 'POST') return JSON.stringify(request.body)
-})
-
 app.use(express.json());
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :newPerson'));
 app.use(cors());
 
 app.get('/api/persons', (request, response) => {
@@ -51,20 +44,8 @@ app.delete('/api/persons/:id', (request, response) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const { body } = request;
-
-  if (!body.name) {
-    return result.status(400).json({
-      error: 'name required',
-    })
-  }
-  if (!body.number) {
-    return result.status(400).json({
-      error: 'number required',
-    })
-  }
-
   const person = new Contact({
     name: body.name,
     number: body.number,
@@ -73,6 +54,7 @@ app.post('/api/persons', (request, response) => {
   person.save().then(savedContact => {
     response.json(savedContact)
   })
+  .catch(error => next(error))
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -86,16 +68,16 @@ app.put('/api/persons/:id', (request, response, next) => {
     .then(updatedPerson => {
       response.json(updatedPerson.toJSON())
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
-
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
-
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
   next(error)
 }
 
